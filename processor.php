@@ -104,7 +104,7 @@ if(isset($_FILES)) { //Check to see if a file is uploaded
         }
 
         unset($fileData[count($fileData)-1]);
-        var_dump($fileData);
+        //var_dump($fileData);
 
         $output = $exceptions = array();
 

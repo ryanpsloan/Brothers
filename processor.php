@@ -92,13 +92,19 @@ if(isset($_FILES)) { //Check to see if a file is uploaded
         }
         //close file reading stream
         fclose($handle);
-        //var_dump($fileData);
+
 
         foreach($fileData as $key => $line){
             if(count($line) < 15){
                 unset($fileData[$key]);
             }
+            if(!array_filter($line)){
+                unset($fileData[$key]);
+            }
         }
+
+        unset($fileData[count($fileData)-1]);
+        var_dump($fileData);
 
         $output = $exceptions = array();
 

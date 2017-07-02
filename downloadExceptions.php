@@ -7,7 +7,7 @@
  */
 session_start();
 if(isset($_SESSION['exceptionFileName'])) {
-    $file = $_SESSION['fileName'];
+    $file = $_SESSION['exceptionFileName'];
     if (file_exists($file)) {
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');

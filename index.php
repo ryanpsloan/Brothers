@@ -66,7 +66,7 @@ session_start();
                 if(isset($_SESSION['fileName'])){ echo "<a href='download.php'>Download</a> | ";
                     echo "<a href='clear.php'>Clear Files</a><br>"; }?>
             </div>
-            <div><?php if(isset($_SESSION['exception'])){echo $_SESSION['exception']; $_SESSION['exception'] = "";}
+            <div><?php if(isset($_SESSION['exception'])){echo $_SESSION['exception']. "<br>"; $_SESSION['exception'] = "";}
                 if(isset($_SESSION['exceptionFileName'])){echo "<a href='downloadExceptions.php'>Download Exceptions</a>";}?>
 
          </div>

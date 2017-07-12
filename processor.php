@@ -198,7 +198,7 @@ if(isset($_FILES)) { //Check to see if a file is uploaded
             $_SESSION['exception'] = "Exception File Created";
         }
 
-        //header("Location: index.php");
+        header("Location: index.php");
 
     } catch (Exception $e) {
         $_SESSION['output'] = $e->getMessage();

@@ -69,7 +69,47 @@ session_start();
             <div><?php if(isset($_SESSION['exception'])){echo $_SESSION['exception']. "<br>"; $_SESSION['exception'] = "";}
                 if(isset($_SESSION['exceptionFileName'])){echo "<a href='downloadExceptions.php'>Download Exceptions</a>";}?>
 
-         </div>
+            </div>
+
+        </div>
+        <div class="row center">
+            <?php
+            if(isset($_SESSION['e01'])){
+                echo "<p>Totals do not reflect lines from the exception file</p>";
+                echo "<h3>E 01</h3>";
+                echo "<p>Count: ". $_SESSION['e01'][0] ."</p>";
+                echo "<p>Total: ". $_SESSION['e01'][1] ."</p><br>";
+            }
+            if(isset($_SESSION['e02'])){
+                echo "<h3>E 02</h3>";
+                echo "<p>Count: ". $_SESSION['e02'][0] ."</p>";
+                echo "<p>Total: ". $_SESSION['e02'][1] ."</p><br>";
+
+            }
+            if(isset($_SESSION['salary'])){
+                echo "<h3>Salary</h3>";
+                echo "<p>Count: ". $_SESSION['salary'][0] ."</p>";
+                echo "<p>Total: ". $_SESSION['salary'][1] ."</p><br>";
+
+            }
+            if(isset($_SESSION['e04'])){
+                echo "<h3>E 04</h3>";
+                echo "<p>Count: ". $_SESSION['e04'][0] ."</p>";
+                echo "<p>Total: ". $_SESSION['e04'][1] ."</p><br>";
+
+            }
+            if(isset($_SESSION['e08'])){
+                echo "<h3>E 08</h3>";
+                echo "<p>Count: ". $_SESSION['e08'][0] ."</p>";
+                echo "<p>Total: ". $_SESSION['e08'][1] ."</p><br>";
+
+            }
+            echo "<hr>";
+            if(isset($_SESSION['total'])) {
+                echo "Total Count: " . $_SESSION['total'][0] . "<br>";
+                echo "Total Amount: " . $_SESSION['total'][1];
+            }
+            ?>
         </div>
     </div>
 </main>

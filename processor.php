@@ -81,7 +81,7 @@ if(isset($_FILES)) { //Check to see if a file is uploaded
         $handle = fopen($newName, "r");
         $firstLine = fgets($handle);
         $headers = fgets($handle);
-
+        //var_dump($firstLine);
         //var_dump($headers);
         $fileData = array();
         //read the data in line by line
@@ -93,9 +93,9 @@ if(isset($_FILES)) { //Check to see if a file is uploaded
         //close file reading stream
         fclose($handle);
 
-
+        //var_dump($fileData);
         foreach($fileData as $key => $line){
-            if(count($line) < 15){
+            if(count($line) < 12){
                 unset($fileData[$key]);
             }
             if(!array_filter($line)){
@@ -107,40 +107,51 @@ if(isset($_FILES)) { //Check to see if a file is uploaded
         //var_dump($fileData);
 
         $output = $exceptions = array();
-
+        $e01 = $e02 = $salary = $e04 = $e08 = 0;
+        $e01total = $e02total = $salaryTotal = $e04total = $e08total = 0;
         foreach($fileData as $line){
             if($line[0] !== '') {
-                if ($line[2] !== '') {
-                    $output[] = array($line[0], "", "", "", "", "E", "01", $line[9], $line[2], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                if ($line[2] !== '') {                                      //line[9]
+                    $output[] = array($line[0], "", "", "", "", "E", "01", $line[6], $line[2], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    $e01++;
+                    $e01total += $line[2];
                 }
                 if ($line[3] !== '') {
-                    $output[] = array($line[0], "", "", "", "", "E", "02", $line[9], $line[3], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    $output[] = array($line[0], "", "", "", "", "E", "02", $line[6], $line[3], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    $e02++;
+                    $e02total += $line[3];
                 }
-                if ($line[4] !== '') {
-                    $output[] = array($line[0], "", "", "", "", "", "", $line[9], $line[4], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                if ($line[4] !== '') {                  //salary "", ""
+                    $output[] = array($line[0], "", "", "", "", "E", "08", $line[6], $line[4], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    $salary++;
+                    $salaryTotal += $line[4];
                 }
-                if ($line[5] !== '') {
+                /*if ($line[5] !== '') {
                     $output[] = array($line[0], "", "", "", "", "E", "04", $line[9], $line[5], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    $e04++;
+                    $e04total += $line[5];
                 }
                 if ($line[6] !== '') {
                     $output[] = array($line[0], "", "", "", "", "E", "08", $line[9], $line[6], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-                }
+                    $e08++;
+                    $e08total += $line[6];
+                }*/
             }else{
                 if ($line[2] !== '') {
-                    $exceptions[] = array("No ID", $line[1], "", "", "", "E", "01", $line[9], $line[2], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    $exceptions[] = array("No ID", $line[1], "", "", "", "E", "01", $line[6], $line[2], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                 }
                 if ($line[3] !== '') {
-                    $exceptions[] = array("No ID", $line[1], "", "", "", "E", "02", $line[9], $line[3], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    $exceptions[] = array("No ID", $line[1], "", "", "", "E", "02", $line[6], $line[3], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                 }
                 if ($line[4] !== '') {
-                    $exceptions[] = array("No ID", $line[1], "", "", "", "", "", $line[9], $line[4], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    $exceptions[] = array("No ID", $line[1], "", "", "", "E", "08", $line[6], $line[4], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                 }
-                if ($line[5] !== '') {
+                /*if ($line[5] !== '') {
                     $exceptions[] = array("No ID", $line[1], "", "", "", "E", "04", $line[9], $line[5], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                 }
                 if ($line[6] !== '') {
                     $exceptions[] = array("No ID", $line[1], "", "", "", "E", "08", $line[9], $line[6], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-                }
+                }*/
             }
         }
 
@@ -159,6 +170,20 @@ if(isset($_FILES)) { //Check to see if a file is uploaded
         fclose($handle);
         $_SESSION['fileName'] = $fileName;
         $_SESSION['output'] = "Import File Successfully Created";
+        $_SESSION['e01'] = array($e01, $e01total);
+        if($e02 > 0){
+            $_SESSION['e02'] = array($e02, $e02total);
+        }
+        if($salary > 0){
+            $_SESSION['salary'] = array($salary,$salaryTotal);
+        }
+        if($e04 > 0){
+            $_SESSION['e04'] = array($e04, $e04total);
+        }
+        if($e08 > 0){
+            $_SESSION['e08'] = array($e08, $e08total);
+        }
+        $_SESSION['total'] = array($e01 + $e02 + $salary + $e04 + $e08, $e01total + $e02total + $salaryTotal + $e04total + $e08total);
 
         if(count($exceptions) > 0) {
             $exceptionFileName = "Files/Brothers_Apparel_Exceptions" . $month . "-" . $day . "-" . $year . "-" . $time . ".csv";
@@ -173,7 +198,7 @@ if(isset($_FILES)) { //Check to see if a file is uploaded
             $_SESSION['exception'] = "Exception File Created";
         }
 
-        header("Location: index.php");
+        //header("Location: index.php");
 
     } catch (Exception $e) {
         $_SESSION['output'] = $e->getMessage();
